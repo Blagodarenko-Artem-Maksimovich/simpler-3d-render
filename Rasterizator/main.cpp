@@ -12,6 +12,8 @@ std::vector<Model*> models;
 int width = 800;
 int height = 800;
 
+bool show_zbuffer = false;
+
 Vec3f light_dir{ 1, 1, 1 };
 Vec3f camera{ 0, 0, 3 };
 Vec3f center{ 0, 0, 0 };
@@ -259,6 +261,9 @@ bool processCommand(const std::string& command)
 			}
 		}
 	}
+	else if (args[0] == "show_zbuffer" && args.size() == 1){
+		show_zbuffer = true;
+	}
 
 	else
 	{
@@ -312,6 +317,7 @@ int main(int argc, char** argv) {
 			std::cout << "- 'light float float float' - change light position (current: " << light_dir.x << ' ' << light_dir.y << ' ' << light_dir.z << ");\n";
 			std::cout << "- 'camera float float float' - change camera position (current: " << camera.x << ' ' << camera.y << ' ' << camera.z << ");\n";
 			std::cout << "- 'center float float float' - change lookat point position (current: " << center.x << ' ' << center.y << ' ' << center.z << ");\n";
+			std::cout << "- 'show_zbuffer' - show only zbuffer\n";
 			std::cout << "- 'add_shader name1 name2 ...' - add shader 1.fog 2.noise 3.negative 4.desaturating 5.blur\n";
 			std::cout << "- 'add_model filename.obj' - add another model to render with its position and specular coefficient (models to render: " << models.size() << ");\n";
 			std::cout << "- 'render' - that's it, render\n";
@@ -365,9 +371,15 @@ int main(int argc, char** argv) {
 	}
 	image.write_tga_file((outputName + ".tga").c_str());
 	zbuffer.write_tga_file((outputName + "_zbuffer.tga").c_str());
-	
-	add_shaders( image, zbuffer, output);
 
+	if (show_zbuffer) {
+		std::cout << 1;
+		zbuffer.write_tga_file((outputName + "output.tga").c_str());
+	}
+	
+	else {
+		add_shaders(image, zbuffer, output);
+	}
 	models.clear();
 
 	system("output.tga");  
