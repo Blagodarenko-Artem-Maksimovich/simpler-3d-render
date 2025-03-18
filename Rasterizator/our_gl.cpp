@@ -134,6 +134,19 @@ bool CombShader::fragment(Vec3f bar, TGAColor& color, Model* model, bool id [6])
 	if (id[0]) {
 		color = image->get(bar.x, bar.y);
 	}
+	if (id[5]) {
+		TGAColor GausColor(0);
+		int radius = 3;
+		int cof = pow(radius * 1.8, 2);
+		for (int i = -radius; i < radius + 1; i++) {
+			for (int j = -radius; j < radius + 1; j++) {
+				TGAColor tmp(0);
+				tmp = TGAColor(image->get(bar.x + i, bar.y + j));
+				GausColor = GausColor + TGAColor(tmp.r / cof, tmp.g / cof, tmp.b / cof, 1);
+			}
+		}
+		color = GausColor;
+	}	
 	if (id[1]) {
 		int fogness = zbuffer->get(bar.x, bar.y).b;
 
@@ -149,19 +162,6 @@ bool CombShader::fragment(Vec3f bar, TGAColor& color, Model* model, bool id [6])
 	if (id[4]) {
 		TGAColor с = color;
 		color = TGAColor((с.r + с.g + с.b) / 3);
-	}
-	if (id[5]) {
-		TGAColor GausColor(0);
-		int radius = 3;
-		int cof = pow( radius*1.8, 2);
-		for (int i = -radius; i < radius+1; i++) {
-			for (int j = -radius; j < radius+1; j++) {
-				TGAColor tmp(0);
-				tmp = TGAColor(image->get(bar.x + i, bar.y + j));
-				GausColor = GausColor + TGAColor(tmp.r /cof , tmp.g / cof, tmp.b / cof, 1);
-			}
-		}
-		color = GausColor;
 	}
 	return false;
 }
