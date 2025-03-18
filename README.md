@@ -18,6 +18,8 @@
 - **Blur**: Post-process Gaussian/Box blur
 **You can combine shaders to get the desired effect**
 
+[render without shaders](https://github.com/Blagodarenko-Artem-Maksimovich/simpler-3d-render/tree/main/Img/simple.png)
+
 ## Comand list
 - 'resize int int' - change width and height of output tga image (current: 800 800);
 - 'light float float float' - change light position (current: 1 1 1);
